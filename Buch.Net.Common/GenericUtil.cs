@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using JetBrains.Annotations;
+using System.Linq;
 
 namespace Buch.Net.Common
 {
@@ -119,7 +118,7 @@ namespace Buch.Net.Common
     /// <summary>
     /// Class for Type extention methods
     /// </summary>
-    public static class TypeExt
+    public static class TypeEx
     {
         /// <summary>
         /// Checks to see a type is a Nullable type
@@ -132,12 +131,55 @@ namespace Buch.Net.Common
 
             return (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>));
         }
+
+        /// <summary>
+        /// Determine whether a type is simple (String, Decimal, DateTime, etc)
+        /// or complex (i.e. custom class with public properties and methods).
+        /// </summary>
+        /// <see cref="http://stackoverflow.com/questions/2442534/how-to-test-if-type-is-primitive"/>
+        /// <see cref="https://gist.github.com/jonathanconway/3330614"/>
+        public static bool IsSimpleType([NotNull] this Type type)
+        {
+            Validate.ArgumentNotNull(type, "type");
+
+            return
+                type.IsValueType ||
+                type.IsPrimitive ||
+                new Type[]
+                {
+                    typeof (String),
+                    typeof (Decimal),
+                    typeof (DateTime),
+                    typeof (DateTimeOffset),
+                    typeof (TimeSpan),
+                    typeof (Guid),
+                }.Contains(type) ||
+                Convert.GetTypeCode(type) != TypeCode.Object;
+        }
+
+        /// <summary>
+        /// Determine whether a type is some time value type
+        /// (Time values are DateTime, DateTimeOffset, TimeSpan)
+        /// </summary>
+        /// <param name="type">The type to examine</param>
+        /// <returns>true if type is a time value type</returns>
+        public static bool IsTimeType([NotNull] this Type type)
+        {
+            Validate.ArgumentNotNull(type, "type");
+
+            return new Type[]
+            {
+                typeof (DateTime),
+                typeof (DateTimeOffset),
+                typeof (TimeSpan)
+            }.Contains(type);
+        }
     }
 
     /// <summary>
     /// Class extention for objects
     /// </summary>
-    public static class ObjectExt
+    public static class ObjectEx
     {
         /// <summary>
         /// Checks if an object is null or its value is zero
@@ -212,6 +254,21 @@ namespace Buch.Net.Common
         public static double ToDouble(this object val)
         {
             return (val is double) ? (double) val : val.ConvertTo<double>();
+        }
+    }
+
+    public static class DateEx
+    {
+        private static readonly List<DayOfWeek> Weekend = new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday };
+
+        public static bool IsWeekend(this DateTime date)
+        {
+            return Weekend.Contains(date.DayOfWeek);
+        }
+
+        public static bool IsWeekday(this DateTime date)
+        {
+            return !date.IsWeekend();
         }
     }
 }
