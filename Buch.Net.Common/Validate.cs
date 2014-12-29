@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using JetBrains.Annotations;
+using Buch.Net.Annotations;
 
 namespace Buch.Net.Common
 {

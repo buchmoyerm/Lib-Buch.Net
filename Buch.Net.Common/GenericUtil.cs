@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using JetBrains.Annotations;
 using System.Linq;
+using Buch.Net.Annotations;
 
 namespace Buch.Net.Common
 {
@@ -55,9 +55,9 @@ namespace Buch.Net.Common
         /// <param name="oldval">old value to be updated</param>
         /// <param name="newval">new value to be used</param>
         /// <returns>true if oldval changed</returns>
-        public static bool UpdateVal(ref double oldval, object newval)
+        public static bool UpdateVal(ref double oldval, [NotNull] object newval)
         {
-            var d = (newval is double) ? (double)newval : (double)(long)newval;
+            var d = (newval is double) ? (double) newval : (double) (long) newval;
             return UpdateVal(ref oldval, d);
         }
 
