@@ -158,6 +158,28 @@ namespace Buch.Net.Common
         }
 
         /// <summary>
+        /// Determine whether a type is simple (String, Decimal, DateTime, etc)
+        /// or complex (i.e. custom class with public properties and methods).
+        /// </summary>
+        /// <see cref="http://stackoverflow.com/questions/2442534/how-to-test-if-type-is-primitive"/>
+        /// <see cref="https://gist.github.com/jonathanconway/3330614"/>
+        public static bool IsWholeNumber([NotNull] this Type type)
+        {
+            Validate.ArgumentNotNull(type, "type");
+
+            return
+                new Type[]
+                {
+                    typeof (short),
+                    typeof (int),
+                    typeof (long),
+                    typeof (Int16),
+                    typeof (Int32),
+                    typeof (Int64),
+                }.Contains(type);
+        }
+
+        /// <summary>
         /// Determine whether a type is some time value type
         /// (Time values are DateTime, DateTimeOffset, TimeSpan)
         /// </summary>
@@ -240,6 +262,12 @@ namespace Buch.Net.Common
                 if (targetType.IsNullableType())
                 {
                     targetType = Nullable.GetUnderlyingType(targetType);
+                }
+
+                //Force trucating when converting to a whole number
+                if (targetType.IsWholeNumber())
+                {
+                    return (TOut)Convert.ChangeType(Math.Truncate(orig.ConvertTo<double>()), targetType, CultureInfo.InvariantCulture);
                 }
 
                 return (TOut)Convert.ChangeType(orig, targetType, CultureInfo.InvariantCulture);

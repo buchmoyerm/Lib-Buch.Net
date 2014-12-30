@@ -46,5 +46,15 @@ namespace Buch.Net.Test.Common
             var actualStr = str.ConvertTo<string>();
             Assert.AreEqual(expectedStr, actualStr, "incorrect conversion");
         }
+
+        [TestMethod]
+        public void ConvertTo_Int_FromDouble_Truncate()
+        {
+            double num = 450.56;
+            int expected = 450;
+
+            var actual = num.ConvertTo<int>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
     }
 }
