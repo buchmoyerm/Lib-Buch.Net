@@ -9,7 +9,7 @@ namespace Buch.Net.Test.Common
     {
 
         [TestMethod]
-        public void SwapInts()
+        public void Swap_TwoInts()
         {
             int origleft, left;
             int origright, right;
@@ -24,7 +24,7 @@ namespace Buch.Net.Test.Common
         }
 
         [TestMethod]
-        public void SwapDouble()
+        public void Swap_Doubles()
         {
             double origleft, left;
             double origright, right;
@@ -39,7 +39,7 @@ namespace Buch.Net.Test.Common
         }
 
         [TestMethod]
-        public void SwapString()
+        public void Swap_Strings()
         {
             string origleft, left;
             string origright, right;
@@ -54,7 +54,7 @@ namespace Buch.Net.Test.Common
         }
 
         [TestMethod]
-        public void SwapDecimal()
+        public void Swap_Decimals()
         {
             decimal origleft, left;
             decimal origright, right;

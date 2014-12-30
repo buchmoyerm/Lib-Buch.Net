@@ -8,7 +8,7 @@ namespace Buch.Net.Test.Common
     public class UpdateValTests
     {
         [TestMethod]
-        public void SwapInts()
+        public void UpdateVal_Int_Changed()
         {
             int val = 40;
             int newval = 6;
@@ -16,14 +16,21 @@ namespace Buch.Net.Test.Common
             var change = GenericUtil.UpdateVal(ref val, newval);
             Assert.AreEqual(newval, val, "value was not updated");
             Assert.IsTrue(change, "No change reported");
+        }
 
-            change = GenericUtil.UpdateVal(ref val, newval);
+        [TestMethod]
+        public void UpdateVal_Int_NotChanged()
+        {
+            int val = 40;
+            int newval = 40;
+
+            var change = GenericUtil.UpdateVal(ref val, newval);
             Assert.AreEqual(newval, val, "value incorrectly changed");
             Assert.IsFalse(change, "change incorrectly reported");
         }
 
         [TestMethod]
-        public void SwapDouble()
+        public void UpdateVal_Double_Changed()
         {
             double val = 40.325;
             double newval = 6.98;
@@ -31,14 +38,21 @@ namespace Buch.Net.Test.Common
             var change = GenericUtil.UpdateVal(ref val, newval);
             Assert.AreEqual(newval, val, "value was not updated");
             Assert.IsTrue(change, "No change reported");
+        }
 
-            change = GenericUtil.UpdateVal(ref val, newval);
+        [TestMethod]
+        public void UpdateVal_Double_NotChanged()
+        {
+            double val = 40.325;
+            double newval = 40.325;
+
+            var change = GenericUtil.UpdateVal(ref val, newval);
             Assert.AreEqual(newval, val, "value incorrectly changed");
             Assert.IsFalse(change, "change incorrectly reported");
         }
 
         [TestMethod]
-        public void SwapString()
+        public void UpdateVal_String_Changed()
         {
             string val = "original string";
             string newval = "new string value";
@@ -46,14 +60,21 @@ namespace Buch.Net.Test.Common
             var change = GenericUtil.UpdateVal(ref val, newval);
             Assert.AreEqual(newval, val, "value was not updated");
             Assert.IsTrue(change, "No change reported");
+        }
 
-            change = GenericUtil.UpdateVal(ref val, newval);
+        [TestMethod]
+        public void UpdateVal_String_NotChanged()
+        {
+            string val = "original string";
+            string newval = "original string";
+
+            var change = GenericUtil.UpdateVal(ref val, newval);
             Assert.AreEqual(newval, val, "value incorrectly changed");
             Assert.IsFalse(change, "change incorrectly reported");
         }
 
         [TestMethod]
-        public void SwapDecimal()
+        public void UpdateVal_Decimal_Changed()
         {
             decimal val = (decimal) 40.0;
             decimal newval = (decimal) 6.230;
@@ -61,8 +82,15 @@ namespace Buch.Net.Test.Common
             var change = GenericUtil.UpdateVal(ref val, newval);
             Assert.AreEqual(newval, val, "value was not updated");
             Assert.IsTrue(change, "No change reported");
+        }
 
-            change = GenericUtil.UpdateVal(ref val, newval);
+        [TestMethod]
+        public void UpdateVal_Decimal_NotChanged()
+        {
+            decimal val = (decimal)40.0;
+            decimal newval = (decimal)40.0;
+
+            var change = GenericUtil.UpdateVal(ref val, newval);
             Assert.AreEqual(newval, val, "value incorrectly changed");
             Assert.IsFalse(change, "change incorrectly reported");
         }

@@ -8,7 +8,7 @@ namespace Buch.Net.Test.Common
     public class ConvertToTests
     {
         [TestMethod]
-        public void IntToString()
+        public void ConvertTo_String_FromInt()
         {
             int num = 23;
             string expectedStr = "23";
@@ -18,7 +18,7 @@ namespace Buch.Net.Test.Common
         }
 
         [TestMethod]
-        public void DoubleToString()
+        public void ConvertTo_String_FromDouble()
         {
             double num = 23.33;
             string expectedStr = "23.33";
@@ -28,7 +28,7 @@ namespace Buch.Net.Test.Common
         }
 
         [TestMethod]
-        public void DecimalToString()
+        public void ConvertTo_String_FromDecimal()
         {
             decimal num = (decimal) 23.33;
             string expectedStr = "23.33";
@@ -38,7 +38,7 @@ namespace Buch.Net.Test.Common
         }
 
         [TestMethod]
-        public void StringToString()
+        public void ConvertTo_String_FromString()
         {
             string str = "mystring";
             string expectedStr = "mystring";
