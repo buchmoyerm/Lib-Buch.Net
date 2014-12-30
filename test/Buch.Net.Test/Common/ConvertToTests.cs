@@ -1,5 +1,4 @@
-﻿using System;
-using Buch.Net.Common;
+﻿using Buch.Net.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Buch.Net.Test.Common
@@ -54,6 +53,96 @@ namespace Buch.Net.Test.Common
             int expected = 450;
 
             var actual = num.ConvertTo<int>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
+
+        [TestMethod]
+        public void ConvertTo_Int_FromDecimal_Truncate()
+        {
+            decimal num = (decimal) 450.56;
+            int expected = 450;
+
+            var actual = num.ConvertTo<int>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
+
+        [TestMethod]
+        public void ConvertTo_Int_FromString_WholeNumber()
+        {
+            string num = "12";
+            int expected = 12;
+
+            var actual = num.ConvertTo<int>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
+
+        [TestMethod]
+        public void ConvertTo_Int_FromString_FloatingNumber()
+        {
+            string num = "12.68";
+            int expected = 12;
+
+            var actual = num.ConvertTo<int>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
+
+        [TestMethod]
+        public void ConvertTo_Double_FromString_WholeNumber()
+        {
+            string num = "12.0";
+            double expected = 12.0;
+
+            var actual = num.ConvertTo<double>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
+
+        [TestMethod]
+        public void ConvertTo_Double_FromString_FloatingNumber()
+        {
+            string num = "12.68";
+            double expected = 12.68;
+
+            var actual = num.ConvertTo<double>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
+
+        [TestMethod]
+        public void ConvertTo_Double_FromInt()
+        {
+            int num = 34;
+            double expected = 34.0;
+
+            var actual = num.ConvertTo<double>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
+
+        [TestMethod]
+        public void ConvertTo_Decimal_FromInt()
+        {
+            int num = 34;
+            decimal expected = 34;
+
+            var actual = num.ConvertTo<decimal>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
+
+        [TestMethod]
+        public void ConvertTo_Decimal_FromDouble()
+        {
+            double num = 34.985;
+            decimal expected = (decimal) 34.985;
+
+            var actual = num.ConvertTo<decimal>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
+
+        [TestMethod]
+        public void ConvertTo_Decimal_FromString()
+        {
+            string num = "35.21";
+            decimal expected = (decimal)35.21;
+
+            var actual = num.ConvertTo<decimal>();
             Assert.AreEqual(expected, actual, "incorrect conversion");
         }
     }
