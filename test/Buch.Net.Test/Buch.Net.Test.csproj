@@ -50,8 +50,17 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="Common\SwapTests.cs" />
+    <Compile Include="Common\ConvertToTests.cs" />
+    <Compile Include="Common\UpdateValTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Buch.Net.Common\Buch.Net.Common.csproj">
+      <Project>{b5df2282-b875-4022-b2a2-b834a6d9a618}</Project>
+      <Name>Buch.Net.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
