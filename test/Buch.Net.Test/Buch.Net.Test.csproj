@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Common\SwapTests.cs" />
     <Compile Include="Common\ConvertToTests.cs" />
+    <Compile Include="Common\DateTests.cs" />
     <Compile Include="Common\UpdateValTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
