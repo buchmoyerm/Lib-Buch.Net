@@ -158,11 +158,8 @@ namespace Buch.Net.Common
         }
 
         /// <summary>
-        /// Determine whether a type is simple (String, Decimal, DateTime, etc)
-        /// or complex (i.e. custom class with public properties and methods).
+        /// Determine whether a type is whole number type (int, long, short)
         /// </summary>
-        /// <see cref="http://stackoverflow.com/questions/2442534/how-to-test-if-type-is-primitive"/>
-        /// <see cref="https://gist.github.com/jonathanconway/3330614"/>
         public static bool IsWholeNumber([NotNull] this Type type)
         {
             Validate.ArgumentNotNull(type, "type");
