@@ -42,6 +42,7 @@
     <Compile Include="Properties\ph4n.Annotations.cs" />
     <Compile Include="GenericUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringEx.cs" />
     <Compile Include="Validate.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
