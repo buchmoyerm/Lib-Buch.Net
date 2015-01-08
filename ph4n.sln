@@ -10,11 +10,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C83D4884-0693-4AFB-8E0F-BF7D5F5B492B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buch.Net.Common", "src\Buch.Net.Common\Buch.Net.Common.csproj", "{B5DF2282-B875-4022-B2A2-B834A6D9A618}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{455984A6-BBBB-46ED-A148-8A2ABFBA95EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buch.Net.Test", "test\Buch.Net.Test\Buch.Net.Test.csproj", "{B879A015-7969-47F4-BFE4-2F3CC9691D09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ph4n.Common", "src\ph4n.Common\ph4n.Common.csproj", "{B5DF2282-B875-4022-B2A2-B834A6D9A618}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ph4n.Test", "test\ph4n.Test\ph4n.Test.csproj", "{B879A015-7969-47F4-BFE4-2F3CC9691D09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

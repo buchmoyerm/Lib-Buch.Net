@@ -6,8 +6,8 @@
     <ProjectGuid>{B879A015-7969-47F4-BFE4-2F3CC9691D09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Buch.Net.Test</RootNamespace>
-    <AssemblyName>Buch.Net.Test</AssemblyName>
+    <RootNamespace>ph4n.Test</RootNamespace>
+    <AssemblyName>ph4n.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Buch.Net.Common\Buch.Net.Common.csproj">
+    <ProjectReference Include="..\..\src\ph4n.Common\ph4n.Common.csproj">
       <Project>{b5df2282-b875-4022-b2a2-b834a6d9a618}</Project>
       <Name>Buch.Net.Common</Name>
     </ProjectReference>

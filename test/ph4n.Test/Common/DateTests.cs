@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Buch.Net.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ph4n.Common;
 
-namespace Buch.Net.Test.Common
+namespace ph4n.Test.Common
 {
     [TestClass]
     public class DateTests

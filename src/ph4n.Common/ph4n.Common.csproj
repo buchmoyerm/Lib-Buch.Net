@@ -7,8 +7,8 @@
     <ProjectGuid>{B5DF2282-B875-4022-B2A2-B834A6D9A618}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Buch.Net.Common</RootNamespace>
-    <AssemblyName>Buch.Net.Common</AssemblyName>
+    <RootNamespace>ph4n.Common</RootNamespace>
+    <AssemblyName>ph4n.Common</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

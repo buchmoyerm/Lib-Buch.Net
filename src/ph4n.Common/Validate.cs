@@ -2,7 +2,7 @@
 using System.Globalization;
 using Buch.Net.Annotations;
 
-namespace Buch.Net.Common
+namespace ph4n.Common
 {
     public static class Validate
     {
