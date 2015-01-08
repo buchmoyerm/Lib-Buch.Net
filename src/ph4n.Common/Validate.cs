@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using Buch.Net.Annotations;
+using ph4n.Common.Properties;
 
 namespace ph4n.Common
 {

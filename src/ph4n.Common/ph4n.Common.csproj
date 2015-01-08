@@ -39,7 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\Buch.Net.Annotations.cs" />
+    <Compile Include="Properties\ph4n.Annotations.cs" />
     <Compile Include="GenericUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validate.cs" />

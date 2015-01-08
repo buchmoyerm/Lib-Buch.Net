@@ -9,7 +9,7 @@
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
 
-namespace Buch.Net.Annotations
+namespace ph4n.Common.Properties
 {
     /// <summary>
     /// Indicates that the value of the marked element could be <c>null</c> sometimes,

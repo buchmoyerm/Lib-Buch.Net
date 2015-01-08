@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Buch.Net.Annotations;
+using ph4n.Common.Properties;
 
 namespace ph4n.Common
 {
