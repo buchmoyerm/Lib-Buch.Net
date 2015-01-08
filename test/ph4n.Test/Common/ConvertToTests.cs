@@ -57,10 +57,30 @@ namespace ph4n.Test.Common
         }
 
         [TestMethod]
+        public void ConvertTo_Int_FromNegativeDouble_Truncate()
+        {
+            double num = -450.56;
+            int expected = -450;
+
+            var actual = num.ConvertTo<int>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
+
+        [TestMethod]
         public void ConvertTo_Int_FromDecimal_Truncate()
         {
             decimal num = (decimal) 450.56;
             int expected = 450;
+
+            var actual = num.ConvertTo<int>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
+
+        [TestMethod]
+        public void ConvertTo_Int_FromNegativeDecimal_Truncate()
+        {
+            decimal num = (decimal)-450.56;
+            int expected = -450;
 
             var actual = num.ConvertTo<int>();
             Assert.AreEqual(expected, actual, "incorrect conversion");
