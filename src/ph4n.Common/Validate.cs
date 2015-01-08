@@ -14,8 +14,7 @@ namespace ph4n.Common
         /// <remarks>Throws ArgumentNullException, ArgumentException</remarks>
         public static void ArgumentNotNullOrEmpty([CanBeNull] string value, [NotNull] string parameterName)
         {
-            if (value == null)
-                throw new ArgumentNullException(parameterName);
+            Validate.ArgumentNotNull(value, parameterName);
 
             if (value.Length == 0)
                 throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "'{0}' cannot be empty.", parameterName), parameterName);
