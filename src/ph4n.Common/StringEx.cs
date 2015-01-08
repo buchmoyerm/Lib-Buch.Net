@@ -7,6 +7,14 @@ namespace ph4n.Common
 {
     public static class StringEx
     {
+        /// <summary>
+        /// Same as Substring, but without exceptions (will instead return empty strings)
+        /// </summary>
+        /// <param name="input">original input string</param>
+        /// <param name="startIndex">start index for substring</param>
+        /// <param name="length">length of substring</param>
+        /// <returns>returns substring within the input string from startIndex with length,
+        /// or "" if invalid startIndex or length</returns>
         public static string SafeSubstring(this string input, int startIndex, int length)
         {
             if (startIndex < 0 || length < 0)

@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ph4n.Common", "src\ph4n.Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ph4n.Test", "test\ph4n.Test\ph4n.Test.csproj", "{B879A015-7969-47F4-BFE4-2F3CC9691D09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ph4n.Threading", "src\ph4n.Threading\ph4n.Threading.csproj", "{9AB6CFE7-E70F-4C06-A66E-FA179AB56AC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{B879A015-7969-47F4-BFE4-2F3CC9691D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B879A015-7969-47F4-BFE4-2F3CC9691D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B879A015-7969-47F4-BFE4-2F3CC9691D09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AB6CFE7-E70F-4C06-A66E-FA179AB56AC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AB6CFE7-E70F-4C06-A66E-FA179AB56AC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AB6CFE7-E70F-4C06-A66E-FA179AB56AC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AB6CFE7-E70F-4C06-A66E-FA179AB56AC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,5 +43,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B5DF2282-B875-4022-B2A2-B834A6D9A618} = {C83D4884-0693-4AFB-8E0F-BF7D5F5B492B}
 		{B879A015-7969-47F4-BFE4-2F3CC9691D09} = {455984A6-BBBB-46ED-A148-8A2ABFBA95EC}
+		{9AB6CFE7-E70F-4C06-A66E-FA179AB56AC5} = {C83D4884-0693-4AFB-8E0F-BF7D5F5B492B}
 	EndGlobalSection
 EndGlobal
