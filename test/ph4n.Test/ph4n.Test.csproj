@@ -54,15 +54,21 @@
     <Compile Include="Common\ConvertToTests.cs" />
     <Compile Include="Common\DateTests.cs" />
     <Compile Include="Common\StringExTests.cs" />
+    <Compile Include="Common\CharExTests.cs" />
     <Compile Include="Common\ValidateTests.cs" />
     <Compile Include="Common\UpdateValTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Threading\CreateTimerTests.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\src\ph4n.Common\ph4n.Common.csproj">
       <Project>{b5df2282-b875-4022-b2a2-b834a6d9a618}</Project>
       <Name>Buch.Net.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\ph4n.Threading\ph4n.Threading.csproj">
+      <Project>{9ab6cfe7-e70f-4c06-a66e-fa179ab56ac5}</Project>
+      <Name>ph4n.Threading</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

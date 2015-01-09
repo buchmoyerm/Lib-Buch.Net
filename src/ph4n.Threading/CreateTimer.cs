@@ -15,10 +15,9 @@ namespace ph4n.Threading
         /// <param name="period">Milliseconds between invoking callback (Timeout.Infinite to disable periodic signaling)</param>
         /// <returns>The timer that is set</returns>
         [NotNull]
-        public static Timer For([NotNull] TimerCallback callback, [NotNull] DateTime time, int period = Timeout.Infinite)
+        public static Timer For([NotNull] TimerCallback callback, DateTime time, int period = Timeout.Infinite)
         {
             Validate.ArgumentNotNull(callback, "callback");
-            Validate.ArgumentNotNull(time, "time");
 
             var ret = new Timer(callback);
 
@@ -46,8 +45,9 @@ namespace ph4n.Threading
         /// <param name="period">Milliseconds between invoking callback (Timeout.Infinite to disable periodic signaling)</param>
         /// <returns>The timer that is set</returns>
         [NotNull]
-        public static Timer For([NotNull] Action callback, [NotNull] DateTime time, int period = Timeout.Infinite)
+        public static Timer For([NotNull] Action callback, DateTime time, int period = Timeout.Infinite)
         {
+            Validate.ArgumentNotNull(callback, "callback");
             return For(state => callback(), time, period);
         }
 
@@ -59,10 +59,9 @@ namespace ph4n.Threading
         /// <param name="period">Milliseconds between invoking callback (Timeout.Infinite to disable periodic signaling)</param>
         /// <returns>The timer that is set</returns>
         [NotNull]
-        public static Timer For([NotNull] TimerCallback callback, [NotNull] TimeSpan fromNow, int period = Timeout.Infinite)
+        public static Timer For([NotNull] TimerCallback callback, TimeSpan fromNow, int period = Timeout.Infinite)
         {
             Validate.ArgumentNotNull(callback, "callback");
-            Validate.ArgumentNotNull(fromNow, "fromNow");
 
             var ret = new Timer(callback);
 
@@ -82,8 +81,9 @@ namespace ph4n.Threading
         /// <param name="period">Milliseconds between invoking callback (Timeout.Infinite to disable periodic signaling)</param>
         /// <returns>The timer that is set</returns>
         [NotNull]
-        public static Timer For( [NotNull] Action callback, [NotNull] TimeSpan fromNow, int period = Timeout.Infinite)
+        public static Timer For( [NotNull] Action callback, TimeSpan fromNow, int period = Timeout.Infinite)
         {
+            Validate.ArgumentNotNull(callback, "callback");
             return For(state => callback(), fromNow, period);
         }
     }
