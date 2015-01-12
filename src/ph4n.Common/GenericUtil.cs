@@ -242,7 +242,7 @@ namespace ph4n.Common
         /// <param name="orig">value of TIn</param>
         /// <returns>value of TOut type</returns>
         [CanBeNull]
-        public static TOut ConvertTo<TIn, TOut>(this TIn orig)
+        public static TOut ConvertTo<TIn, TOut>([CanBeNull] this TIn orig)
         {
             if (orig == null)
                 return default(TOut);
@@ -250,25 +250,62 @@ namespace ph4n.Common
             if (orig is TOut)
             {
                 // HACK
-                return (TOut)(object)orig;
+                return (TOut) (object) orig;
             }
             else
             {
-                Type targetType = typeof(TOut);
-
-                if (targetType.IsNullableType())
+                try
                 {
-                    targetType = Nullable.GetUnderlyingType(targetType);
-                }
+                    Type targetType = typeof (TOut);
 
-                //Force trucating when converting to a whole number
-                if (targetType.IsWholeNumber())
+                    if (targetType.IsNullableType())
+                    {
+                        targetType = Nullable.GetUnderlyingType(targetType);
+                    }
+
+                    //Force trucating when converting to a whole number
+                    if (targetType.IsWholeNumber())
+                    {
+                        return (TOut) Convert.ChangeType(Math.Truncate(orig.ConvertTo<double>()), targetType,
+                                    CultureInfo.InvariantCulture);
+                    }
+
+                    if (targetType.IsEnum && orig is string)
+                    {
+                        return (orig as string).ToEnum<TOut>();
+                    }
+
+                    return (TOut) Convert.ChangeType(orig, targetType, CultureInfo.InvariantCulture);
+                }
+                catch
                 {
-                    return (TOut)Convert.ChangeType(Math.Truncate(orig.ConvertTo<double>()), targetType, CultureInfo.InvariantCulture);
+                    return default(TOut);
                 }
-
-                return (TOut)Convert.ChangeType(orig, targetType, CultureInfo.InvariantCulture);
             }
+        }
+
+        /// <summary>
+        /// String extention method to convert a string to an enum value
+        /// </summary>
+        /// <typeparam name="TOut">Type of Enum</typeparam>
+        /// <param name="str">string value to convert</param>
+        /// <returns>enum value</returns>
+        /// <remarks>Throws ArgumentNullException, ArgumentException</remarks>
+        [NotNull]
+        private static TOut ToEnum<TOut>([NotNull] this string str)
+        {
+            Validate.ArgumentTypeIsEnum(typeof(TOut), "TOut");
+            Validate.ArgumentNotNullOrEmpty(str, "str");
+            try
+            {
+                TOut res = (TOut)Enum.Parse(typeof(TOut), str);
+                if (!Enum.IsDefined(typeof(TOut), res)) return default(TOut);
+                return res; 
+            }
+            catch
+            {
+                return default (TOut);
+            } 
         }
 
         /// <summary>

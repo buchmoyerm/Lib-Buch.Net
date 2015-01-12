@@ -165,5 +165,23 @@ namespace ph4n.Test.Common
             var actual = num.ConvertTo<decimal>();
             Assert.AreEqual(expected, actual, "incorrect conversion");
         }
+
+        [TestMethod]
+        public void ConvertTo_Enum_FromString_Valid()
+        {
+            var expected = System.Net.Sockets.AddressFamily.InterNetwork;
+            var str = "InterNetwork";
+            var actual = str.ConvertTo<System.Net.Sockets.AddressFamily>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
+
+        [TestMethod]
+        public void ConvertTo_Enum_FromString_Invalid()
+        {
+            var expected = default(System.Net.Sockets.AddressFamily);
+            var str = "No network";
+            var actual = str.ConvertTo<System.Net.Sockets.AddressFamily>();
+            Assert.AreEqual(expected, actual, "incorrect conversion");
+        }
     }
 }

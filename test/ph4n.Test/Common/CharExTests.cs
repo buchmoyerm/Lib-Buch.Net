@@ -12,11 +12,11 @@ namespace ph4n.Test.Common
         {
             for (long c = 0x00BC; c <= 0x00BE; ++c)
             {
-                Assert.IsTrue(((char) c).IsVulgarFraction(), "IsVulgarFractionReturned false for {0}", (char) c);
+                Assert.IsTrue(((char) c).IsVulgarFraction(), "IsVulgarFraction Returned false for {0}", (char) c);
             }
             for (long c = 0x2150; c <= 0x215E; ++c)
             {
-                Assert.IsTrue(((char)c).IsVulgarFraction(), "IsVulgarFractionReturned false for {0}", (char)c);
+                Assert.IsTrue(((char)c).IsVulgarFraction(), "IsVulgarFraction Returned false for {0}", (char)c);
             }
         }
 
@@ -24,16 +24,16 @@ namespace ph4n.Test.Common
         public void IsVulgarFraction_false()
         {
             long c = 0x00BC - 1;
-            Assert.IsFalse(((char)c).IsVulgarFraction(), "IsVulgarFractionReturned true for {0}", (char)c);
+            Assert.IsFalse(((char)c).IsVulgarFraction(), "IsVulgarFraction Returned true for {0}", (char)c);
 
             c = 0x00BE + 1;
-            Assert.IsFalse(((char)c).IsVulgarFraction(), "IsVulgarFractionReturned true for {0}", (char)c);
+            Assert.IsFalse(((char)c).IsVulgarFraction(), "IsVulgarFraction Returned true for {0}", (char)c);
 
             c = 0x2150 - 1;
-            Assert.IsFalse(((char)c).IsVulgarFraction(), "IsVulgarFractionReturned true for {0}", (char)c);
+            Assert.IsFalse(((char)c).IsVulgarFraction(), "IsVulgarFraction Returned true for {0}", (char)c);
 
             c = 0x215E + 1;
-            Assert.IsFalse(((char)c).IsVulgarFraction(), "IsVulgarFractionReturned true for {0}", (char)c);
+            Assert.IsFalse(((char)c).IsVulgarFraction(), "IsVulgarFraction Returned true for {0}", (char)c);
         }
     }
 }
