@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventHandlerEx.cs" />
     <Compile Include="Properties\ph4n.Annotations.cs" />
     <Compile Include="GenericUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
