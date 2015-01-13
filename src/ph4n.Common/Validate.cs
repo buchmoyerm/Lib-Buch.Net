@@ -12,12 +12,14 @@ namespace ph4n.Common
         /// <param name="value">argument to check</param>
         /// <param name="parameterName">name of arguement</param>
         /// <remarks>Throws ArgumentNullException, ArgumentException</remarks>
+        [ContractAnnotation("value: null => halt")]
         public static void ArgumentNotNullOrEmpty([CanBeNull] string value, [NotNull, InvokerParameterName] string parameterName)
         {
-            Validate.ArgumentNotNull(value, parameterName);
+            ArgumentNotNull(value, parameterName);
 
             if (value.Length == 0)
-                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "'{0}' cannot be empty.", parameterName), parameterName);
+                throw new ArgumentException(
+                    string.Format(CultureInfo.InvariantCulture, "'{0}' cannot be empty.", parameterName), parameterName);
         }
 
         /// <summary>
@@ -26,6 +28,7 @@ namespace ph4n.Common
         /// <param name="value">argument to check</param>
         /// <param name="parameterName">name of arguement</param>
         /// <remarks>Throws ArgumentNullException, ArgumentException</remarks>
+        [ContractAnnotation("enumType: null => halt")]
         public static void ArgumentTypeIsEnum([CanBeNull] Type enumType, [NotNull, InvokerParameterName] string parameterName)
         {
             ArgumentNotNull(enumType, "enumType");
@@ -40,6 +43,7 @@ namespace ph4n.Common
         /// <param name="value">argument to check</param>
         /// <param name="parameterName">name of arguement</param>
         /// <remarks>Throws ArgumentNullException</remarks>
+        [ContractAnnotation("value: null => halt")]
         public static void ArgumentNotNull([CanBeNull] object value, [NotNull, InvokerParameterName] string parameterName)
         {
             if (value == null)

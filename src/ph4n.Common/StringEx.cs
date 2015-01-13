@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ph4n.Common.Properties;
 
 namespace ph4n.Common
 {
@@ -15,8 +16,15 @@ namespace ph4n.Common
         /// <param name="length">length of substring</param>
         /// <returns>returns substring within the input string from startIndex with length,
         /// or "" if invalid startIndex or length</returns>
-        public static string SafeSubstring(this string input, int startIndex, int length)
+        [NotNull]
+        [ContractAnnotation("input: null => notnull; notnull => not" + "null")]
+        public static string SafeSubstring([CanBeNull] this string input, int startIndex, int length)
         {
+            if (string.IsNullOrEmpty(input))
+            {
+                return string.Empty;
+            }
+
             if (startIndex < 0 || length < 0)
             {
                 return string.Empty;

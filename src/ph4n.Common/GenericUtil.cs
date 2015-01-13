@@ -125,11 +125,11 @@ namespace ph4n.Common
         /// </summary>
         /// <param name="t">type to check</param>
         /// <returns>true if t is a NullableType</returns>
-        public static bool IsNullableType(this Type t)
+        public static bool IsNullableType([NotNull] this Type t)
         {
             Validate.ArgumentNotNull(t, "t");
 
-            return (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>));
+            return (t.IsGenericType && t.GetGenericTypeDefinition() == typeof (Nullable<>));
         }
 
         /// <summary>
