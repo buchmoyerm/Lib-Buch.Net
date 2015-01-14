@@ -116,7 +116,7 @@ namespace ph4n.Common
     }
 
     /// <summary>
-    /// Class for Type extention methods
+    /// Class for Type extension methods
     /// </summary>
     public static class TypeEx
     {
@@ -196,7 +196,7 @@ namespace ph4n.Common
     }
 
     /// <summary>
-    /// Class extention for objects
+    /// Class extension for objects
     /// </summary>
     public static class ObjectEx
     {
@@ -285,7 +285,7 @@ namespace ph4n.Common
         }
 
         /// <summary>
-        /// String extention method to convert a string to an enum value
+        /// String extension method to convert a string to an enum value
         /// </summary>
         /// <typeparam name="TOut">Type of Enum</typeparam>
         /// <param name="str">string value to convert</param>

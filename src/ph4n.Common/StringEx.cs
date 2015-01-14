@@ -17,7 +17,7 @@ namespace ph4n.Common
         /// <returns>returns substring within the input string from startIndex with length,
         /// or "" if invalid startIndex or length</returns>
         [NotNull]
-        [ContractAnnotation("input: null => notnull; notnull => not" + "null")]
+        [ContractAnnotation("input: null => notnull; notnull => notnull")]
         public static string SafeSubstring([CanBeNull] this string input, int startIndex, int length)
         {
             if (string.IsNullOrEmpty(input))
