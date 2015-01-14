@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
+using JetBrains.Annotations;
 using ph4n.Common;
-using ph4n.Common.Properties;
 
 namespace ph4n.Threading
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ph4n.Common.Properties;
+using JetBrains.Annotations;
 
 namespace ph4n.Common
 {

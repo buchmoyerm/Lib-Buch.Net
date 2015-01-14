@@ -1,5 +1,5 @@
 ﻿using System;
-using ph4n.Common.Properties;
+using JetBrains.Annotations;
 
 namespace ph4n.Common
 {
