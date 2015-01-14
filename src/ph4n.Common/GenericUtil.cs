@@ -263,7 +263,7 @@ namespace ph4n.Common
                         targetType = Nullable.GetUnderlyingType(targetType);
                     }
 
-                    //Force trucating when converting to a whole number
+                    //Force truncating when converting to a whole number
                     if (targetType.IsWholeNumber())
                     {
                         return (TOut) Convert.ChangeType(Math.Truncate(orig.ConvertTo<double>()), targetType,
