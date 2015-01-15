@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using JetBrains.Annotations;
 
 namespace ph4n.Common
@@ -13,7 +17,8 @@ namespace ph4n.Common
         /// <param name="parameterName">name of arguement</param>
         /// <remarks>Throws ArgumentNullException, ArgumentException</remarks>
         [ContractAnnotation("value: null => halt")]
-        public static void ArgumentNotNullOrEmpty([CanBeNull] string value, [NotNull, InvokerParameterName] string parameterName)
+        public static void ArgumentNotNullOrEmpty([CanBeNull] string value,
+            [NotNull, InvokerParameterName] string parameterName)
         {
             ArgumentNotNull(value, parameterName);
 
@@ -29,12 +34,14 @@ namespace ph4n.Common
         /// <param name="parameterName">name of arguement</param>
         /// <remarks>Throws ArgumentNullException, ArgumentException</remarks>
         [ContractAnnotation("enumType: null => halt")]
-        public static void ArgumentTypeIsEnum([CanBeNull] Type enumType, [NotNull, InvokerParameterName] string parameterName)
+        public static void ArgumentTypeIsEnum([CanBeNull] Type enumType,
+            [NotNull, InvokerParameterName] string parameterName)
         {
             ArgumentNotNull(enumType, "enumType");
 
             if (!enumType.IsEnum)
-                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Type {0} is not an Enum.", enumType), parameterName);
+                throw new ArgumentException(
+                    string.Format(CultureInfo.InvariantCulture, "Type {0} is not an Enum.", enumType), parameterName);
         }
 
         /// <summary>
@@ -44,10 +51,49 @@ namespace ph4n.Common
         /// <param name="parameterName">name of arguement</param>
         /// <remarks>Throws ArgumentNullException</remarks>
         [ContractAnnotation("value: null => halt")]
-        public static void ArgumentNotNull([CanBeNull] object value, [NotNull, InvokerParameterName] string parameterName)
+        public static void ArgumentNotNull([CanBeNull] object value,
+            [NotNull, InvokerParameterName] string parameterName)
         {
             if (value == null)
                 throw new ArgumentNullException(parameterName);
+        }
+
+        /// <summary>
+        /// Validates that IEnumerable contains an elements that satisfies validFunc
+        /// </summary>
+        /// <typeparam name="T">type held by enumerable</typeparam>
+        /// <param name="enumerable">enumerable object</param>
+        /// <param name="testFunc">test function that is being searched for</param>
+        /// <remarks>Throws ArgumentException, ArgumentNullException</remarks>
+        public static void ArgumentContains<T>([NotNull] IEnumerable<T> enumerable, [NotNull] Func<T, bool> validFunc, [NotNull, InvokerParameterName] string parameterName)
+        {
+            Validate.ArgumentNotNull(enumerable, "enumerable");
+            Validate.ArgumentNotNull(validFunc, "testFunc");
+            Validate.ArgumentNotNull(parameterName, "parameterName");
+
+            if (! enumerable.Any(validFunc))
+            {
+                throw new ArgumentException("Argument does not contain a valid element", parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Validates that IEnumerable contains only elements that satisfy validFunc
+        /// </summary>
+        /// <typeparam name="T">type held by enumerable</typeparam>
+        /// <param name="enumerable">enumerable object</param>
+        /// <param name="testFunc">test function that is being searched for</param>
+        /// <remarks>Throws ArgumentException, ArgumentNullException</remarks>
+        public static void ArgumentContainsOnly<T>([NotNull] IEnumerable<T> enumerable, [NotNull] Func<T, bool> validFunc, [NotNull, InvokerParameterName] string parameterName)
+        {
+            Validate.ArgumentNotNull(enumerable, "enumerable");
+            Validate.ArgumentNotNull(validFunc, "validFunc");
+            Validate.ArgumentNotNull(parameterName, "parameterName");
+
+            if (enumerable.Any(t => !validFunc(t)))
+            {
+                throw new ArgumentException("Argument does not contain a valid element", parameterName);
+            }
         }
     }
 }

@@ -104,5 +104,35 @@ namespace ph4n.Test.Common
             Type testType = typeof(System.Net.Sockets.AddressFamily);
             Validate.ArgumentTypeIsEnum(testType, "testType");
         }
+
+        [TestMethod]
+        public void ArgumentContainsOnly_IsLetter_true()
+        {
+            string valid_alpha = "AlphaString";
+            Validate.ArgumentContainsOnly(valid_alpha, char.IsLetter, "valid_alpha");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ArgumentContainsOnly_IsLetter_false_throw()
+        {
+            string invalid_alpha = "AlphaString1";
+            Validate.ArgumentContainsOnly(invalid_alpha, char.IsLetter, "invalid_alpha");
+        }
+
+        [TestMethod]
+        public void ArgumentContains_IsLetter_true()
+        {
+            string valid_input = "123a";
+            Validate.ArgumentContains(valid_input, char.IsLetter, "valid_input");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ArgumentContains_IsLetter_false_throws()
+        {
+            string invalid_input = "1235";
+            Validate.ArgumentContains(invalid_input, char.IsLetter, "invalid_input");
+        }
     }
 }
