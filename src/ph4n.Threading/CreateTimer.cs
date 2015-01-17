@@ -15,7 +15,7 @@ namespace ph4n.Threading
         /// <param name="period">Milliseconds between invoking callback (Timeout.Infinite to disable periodic signaling)</param>
         /// <returns>The timer that is set</returns>
         [NotNull]
-        public static Timer For([NotNull] TimerCallback callback, DateTime time, int period = Timeout.Infinite)
+        public static Timer For([NotNull] TimerCallback callback, DateTime time, long period = Timeout.Infinite)
         {
             Validate.ArgumentNotNull(callback, "callback");
 
@@ -45,7 +45,7 @@ namespace ph4n.Threading
         /// <param name="period">Milliseconds between invoking callback (Timeout.Infinite to disable periodic signaling)</param>
         /// <returns>The timer that is set</returns>
         [NotNull]
-        public static Timer For([NotNull] Action callback, DateTime time, int period = Timeout.Infinite)
+        public static Timer For([NotNull] Action callback, DateTime time, long period = Timeout.Infinite)
         {
             Validate.ArgumentNotNull(callback, "callback");
             return For(state => callback(), time, period);
@@ -59,7 +59,7 @@ namespace ph4n.Threading
         /// <param name="period">Milliseconds between invoking callback (Timeout.Infinite to disable periodic signaling)</param>
         /// <returns>The timer that is set</returns>
         [NotNull]
-        public static Timer For([NotNull] TimerCallback callback, TimeSpan fromNow, int period = Timeout.Infinite)
+        public static Timer For([NotNull] TimerCallback callback, TimeSpan fromNow, long period = Timeout.Infinite)
         {
             Validate.ArgumentNotNull(callback, "callback");
 
@@ -81,7 +81,7 @@ namespace ph4n.Threading
         /// <param name="period">Milliseconds between invoking callback (Timeout.Infinite to disable periodic signaling)</param>
         /// <returns>The timer that is set</returns>
         [NotNull]
-        public static Timer For( [NotNull] Action callback, TimeSpan fromNow, int period = Timeout.Infinite)
+        public static Timer For( [NotNull] Action callback, TimeSpan fromNow, long period = Timeout.Infinite)
         {
             Validate.ArgumentNotNull(callback, "callback");
             return For(state => callback(), fromNow, period);
