@@ -17,7 +17,11 @@ namespace ph4n.Net
 
         public FTPClient(string remoteHost, string remoteUser, string remotePassword)
         {
-            _remoteHost = remoteHost;
+            if (remoteHost.ToUpperInvariant().StartsWith("FTP:"))
+                _remoteHost = remoteHost;
+            else
+                _remoteHost = string.Format("ftp://{0}", remoteHost);
+
             _remoteUser = remoteUser;
             _remotePass = remotePassword;
         }
