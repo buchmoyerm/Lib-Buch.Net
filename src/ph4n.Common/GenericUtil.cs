@@ -298,7 +298,7 @@ namespace ph4n.Common
             Validate.ArgumentNotNullOrEmpty(str, "str");
             try
             {
-                TOut res = (TOut)Enum.Parse(typeof(TOut), str);
+                TOut res = (TOut)Enum.Parse(typeof(TOut), str, true);
                 if (!Enum.IsDefined(typeof(TOut), res)) return default(TOut);
                 return res; 
             }
