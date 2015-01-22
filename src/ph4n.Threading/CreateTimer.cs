@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using ph4n.Common;
+using System;
+using System.Threading;
 
 namespace ph4n.Threading
 {
@@ -23,7 +23,7 @@ namespace ph4n.Threading
 
             DateTime now = DateTime.Now;
 
-            // If it's already past [time], wait until [time] tomorrow    
+            // If it's already past [time], wait until [time] tomorrow
             if (now > time)
             {
                 time = time.AddDays(1.0);
@@ -81,7 +81,7 @@ namespace ph4n.Threading
         /// <param name="period">Milliseconds between invoking callback (Timeout.Infinite to disable periodic signaling)</param>
         /// <returns>The timer that is set</returns>
         [NotNull]
-        public static Timer For( [NotNull] Action callback, TimeSpan fromNow, long period = Timeout.Infinite)
+        public static Timer For([NotNull] Action callback, TimeSpan fromNow, long period = Timeout.Infinite)
         {
             Validate.ArgumentNotNull(callback, "callback");
             return For(state => callback(), fromNow, period);
