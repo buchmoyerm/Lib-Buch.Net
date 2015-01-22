@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
+using System;
 
 namespace ph4n.Common
 {
@@ -67,54 +64,71 @@ namespace ph4n.Common
                 case 0x00BC:
                     d = .25;
                     break;
+
                 case 0x00BD:
                     d = .5;
                     break;
+
                 case 0x00BE:
                     d = .75;
                     break;
+
                 case 0x2150:
                     d = 1 / 7;
                     break;
+
                 case 0x2151:
                     d = 1 / 9;
                     break;
+
                 case 0x2152:
                     d = .1;
                     break;
+
                 case 0x2153:
                     d = 1 / 3;
                     break;
+
                 case 0x2154:
                     d = 2 / 3;
                     break;
+
                 case 0x2155:
                     d = .2;
                     break;
+
                 case 0x2156:
                     d = .4;
                     break;
+
                 case 0x2157:
                     d = .6;
                     break;
+
                 case 0x2158:
                     d = .8;
                     break;
+
                 case 0x2159:
                     d = 1 / 6;
                     break;
+
                 case 0x215A:
                     d = 5 / 6;
                     break;
+
                 case 0x215B:
                     d = .125;
                     break;
+
                 case 0x215C:
                     d = .375;
                     break;
+
                 case 0x215D:
                     d = .625;
                     break;
+
                 case 0x215E:
                     d = .875;
                     break;

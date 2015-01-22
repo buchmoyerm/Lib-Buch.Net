@@ -8,10 +8,8 @@ namespace ph4n.Net
     {
         // The hostname or IP address of the FTP server
         private string _remoteHost;
-
         // The remote username
         private string _remoteUser;
-
         // Password for the remote user
         private string _remotePass;
 
@@ -90,5 +88,4 @@ namespace ph4n.Net
             }
         }
     }
-
 }

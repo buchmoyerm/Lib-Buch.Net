@@ -1,9 +1,9 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using JetBrains.Annotations;
 
 namespace ph4n.Common
 {
@@ -58,7 +58,7 @@ namespace ph4n.Common
         /// <returns>true if oldval changed</returns>
         public static bool UpdateVal(ref double oldval, [NotNull] object newval)
         {
-            var d = (newval is double) ? (double) newval : (double) (long) newval;
+            var d = (newval is double) ? (double)newval : (double)(long)newval;
             return UpdateVal(ref oldval, d);
         }
 
@@ -93,7 +93,7 @@ namespace ph4n.Common
         }
 
         /// <summary>
-        /// Converts an object to a specific type 
+        /// Converts an object to a specific type
         /// </summary>
         /// <typeparam name="TOut">Type to convert to</typeparam>
         /// <param name="orig">original object</param>
@@ -130,7 +130,7 @@ namespace ph4n.Common
         {
             Validate.ArgumentNotNull(t, "t");
 
-            return (t.IsGenericType && t.GetGenericTypeDefinition() == typeof (Nullable<>));
+            return (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>));
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace ph4n.Common
         }
 
         /// <summary>
-        /// Converts an object to a specific type 
+        /// Converts an object to a specific type
         /// </summary>
         /// <typeparam name="TOut">Type to convert to</typeparam>
         /// <param name="orig">original object</param>
@@ -253,13 +253,13 @@ namespace ph4n.Common
             if (orig is TOut)
             {
                 // HACK
-                return (TOut) (object) orig;
+                return (TOut)(object)orig;
             }
             else
             {
                 try
                 {
-                    Type targetType = typeof (TOut);
+                    Type targetType = typeof(TOut);
 
                     if (targetType.IsNullableType())
                     {
@@ -269,7 +269,7 @@ namespace ph4n.Common
                     //Force truncating when converting to a whole number
                     if (targetType.IsWholeNumber())
                     {
-                        return (TOut) Convert.ChangeType(Math.Truncate(orig.ConvertTo<double>()), targetType,
+                        return (TOut)Convert.ChangeType(Math.Truncate(orig.ConvertTo<double>()), targetType,
                                     CultureInfo.InvariantCulture);
                     }
 
@@ -278,7 +278,7 @@ namespace ph4n.Common
                         return (orig as string).ToEnum<TOut>();
                     }
 
-                    return (TOut) Convert.ChangeType(orig, targetType, CultureInfo.InvariantCulture);
+                    return (TOut)Convert.ChangeType(orig, targetType, CultureInfo.InvariantCulture);
                 }
                 catch
                 {
@@ -303,12 +303,12 @@ namespace ph4n.Common
             {
                 TOut res = (TOut)Enum.Parse(typeof(TOut), str, true);
                 if (!Enum.IsDefined(typeof(TOut), res)) return default(TOut);
-                return res; 
+                return res;
             }
             catch
             {
-                return default (TOut);
-            } 
+                return default(TOut);
+            }
         }
 
         /// <summary>
@@ -318,7 +318,7 @@ namespace ph4n.Common
         /// <returns>double value</returns>
         public static double ToDouble(this object val)
         {
-            return (val is double) ? (double) val : val.ConvertTo<double>();
+            return (val is double) ? (double)val : val.ConvertTo<double>();
         }
     }
 
