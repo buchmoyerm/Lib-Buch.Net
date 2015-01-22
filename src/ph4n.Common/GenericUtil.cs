@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using JetBrains.Annotations;
@@ -228,6 +229,7 @@ namespace ph4n.Common
         /// <typeparam name="TOut">Type to convert to</typeparam>
         /// <param name="orig">original object</param>
         /// <returns>value of TOut type</returns>
+        [DebuggerStepThrough, DebuggerHidden]
         [CanBeNull]
         public static TOut ConvertTo<TOut>(this object orig)
         {
@@ -241,6 +243,7 @@ namespace ph4n.Common
         /// <typeparam name="TOut">Type to be converted to</typeparam>
         /// <param name="orig">value of TIn</param>
         /// <returns>value of TOut type</returns>
+        [DebuggerStepThrough, DebuggerHidden]
         [CanBeNull]
         public static TOut ConvertTo<TIn, TOut>([CanBeNull] this TIn orig)
         {
