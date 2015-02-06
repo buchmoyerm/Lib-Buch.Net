@@ -41,9 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncResultEventArgs.cs" />
+    <Compile Include="AsyncTcpSocketOperations.cs" />
+    <Compile Include="TcpSocketOld.cs" />
     <Compile Include="FtpClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SocketAwaitable.cs" />
+    <Compile Include="AsyncSocketOld.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ph4n.Common\ph4n.Common.csproj">
