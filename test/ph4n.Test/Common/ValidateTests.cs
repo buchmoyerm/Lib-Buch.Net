@@ -134,5 +134,50 @@ namespace ph4n.Test.Common
             string invalid_input = "1235";
             Validate.ArgumentContains(invalid_input, char.IsLetter, "invalid_input");
         }
+
+        [TestMethod]
+        public void ArgumementGreaterThan_int_is_greater()
+        {
+            int valid_input = 1;
+            Validate.ArgumementGreaterThan(valid_input, 0, "valid_input");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof (ArgumentException))]
+        public void ArgumementGreaterThan_int_is_equal()
+        {
+            int invalid_input = 0;
+            Validate.ArgumementGreaterThan(invalid_input, 0, "invalid_input");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof (ArgumentException))]
+        public void ArgumentGreaterThan_int_is_less()
+        {
+            int invalid_input = -1;
+            Validate.ArgumementGreaterThan(invalid_input, 0, "invalid_input");
+        }
+
+        public void ArgumementGreaterThan_float_is_greater()
+        {
+            float valid_input = (float)0.002;
+            Validate.ArgumementGreaterThan(valid_input, (float)0.0, "valid_input");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ArgumementGreaterThan_float_is_equal()
+        {
+            float invalid_input = (float)0.0;
+            Validate.ArgumementGreaterThan(invalid_input, (float)0.0, "invalid_input");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ArgumentGreaterThan_float_is_less()
+        {
+            float invalid_input = (float)-0.01;
+            Validate.ArgumementGreaterThan(invalid_input, (float)0.0, "invalid_input");
+        }
     }
 }

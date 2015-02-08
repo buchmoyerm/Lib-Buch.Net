@@ -93,5 +93,22 @@ namespace ph4n.Common
                 throw new ArgumentException("Argument does not contain a valid element", parameterName);
             }
         }
+
+        /// <summary>
+        /// Validates arguemnt is greater than a specific number
+        /// </summary>
+        /// <param name="argument">argument to compare</param>
+        /// <param name="greaterThan">value argument must be greater than</param>
+        /// <param name="parameterName">name of the argument</param>
+        /// <remarks>throws ArgumentException, ArgumentNullException</remarks>
+        public static void ArgumementGreaterThan(IComparable argument, IComparable greaterThan, [NotNull, InvokerParameterName] string parameterName)
+        {
+            Validate.ArgumentNotNullOrEmpty(parameterName, "parameterName");
+
+            if (argument.CompareTo(greaterThan) <= 0 )
+            {
+                throw new ArgumentException(string.Format("Agrument is not greater than {0}", greaterThan), parameterName);
+            }
+        }
     }
 }
