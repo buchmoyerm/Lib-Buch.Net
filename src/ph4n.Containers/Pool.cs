@@ -334,6 +334,8 @@ namespace ph4n.Containers
             this._internalItem = item;
         }
 
+        public T Target { get { return _internalItem; } }
+
         public void Dispose()
         {
             if (_pool.IsDisposed)
@@ -347,11 +349,6 @@ namespace ph4n.Containers
             {
                 _pool.Release(this);
             }
-        }
-
-        public void Test()
-        {
-            internalFoo.Test();
         }
     }
 }
