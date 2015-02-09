@@ -8,6 +8,10 @@ using System.Text;
 using JetBrains.Annotations;
 using ph4n.Common;
 
+//
+// See this http://stackoverflow.com/a/17094024/351028
+// 
+
 namespace ph4n.Net
 {
     public static class SaeaFactory
