@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using ph4n.Common;
 
@@ -43,31 +44,6 @@ namespace ph4n.Net
         /// <param name="backlog">The number of backlog connections for listening.</param>
         void ListenAsync(IPEndPoint bindTo, int backlog);
 
-        /// <inheritdoc cref="Listen(IPEndPoint, int)" />
-        /// <param name="address">The address of the local endpoint.</param>
-        /// <param name="port">The port of the local endpoint.</param>
-        /// <param name="backlog">The number of backlog connections for listening.</param>
-        void ListenAsync(IPAddress address, int port, int backlog);
-
-
-        /// <inheritdoc cref="Listen(IPEndPoint, int)" />
-        /// <param name="bindTo">The local endpoint.</param>
-        void ListenAsync(IPEndPoint bindTo);
-
-        /// <inheritdoc cref="Listen(IPEndPoint, int)" />
-        /// <param name="address">The address of the local endpoint.</param>
-        /// <param name="port">The port of the local endpoint.</param>
-        void ListenAsync(IPAddress address, int port);
-
-        /// <inheritdoc cref="Listen(IPEndPoint, int)" />
-        /// <param name="port">The port of the local endpoint.</param>
-        /// <param name="backlog">The number of backlog connections for listening.</param>
-        void ListenAsync(int port, int backlog);
-
-        /// <inheritdoc cref="Listen(IPEndPoint, int)" />
-        /// <param name="port">The port of the local endpoint.</param>
-        void ListenAsync(int port);
-
         /// <summary>
         /// Delegate to invoke when the accept operation completes.
         /// </summary>
@@ -97,11 +73,6 @@ namespace ph4n.Net
         /// <param name="server">The address and port of the server to connect to.</param>
         void ConnectAsync(IPEndPoint server);
 
-        /// <inheritdoc cref="ConnectAsync(IPEndPoint)" />
-        /// <param name="address">The address of the server to connect to.</param>
-        /// <param name="port">The port of the server to connect to.</param>
-        void ConnectAsync(IPAddress address, int port);
-
         /// <summary>
         /// Indicates the completion of a connect operation, either successfully or with error.
         /// </summary>
@@ -115,6 +86,7 @@ namespace ph4n.Net
         #endregion initiator operations
 
         #region shutdown operations
+
         /// <summary>
         /// Initiates a shutdown operation. Once a shutdown operation is initiated, only the shutdown operation will complete.
         /// </summary>
@@ -122,9 +94,6 @@ namespace ph4n.Net
         /// <para>The shutdown operation will complete by invoking <see cref="ShutdownCompleted"/>.</para>
         /// <para>Shutdown operations are never cancelled.</para>
         /// </remarks>
-        void ShutdownAsync();
-
-        /// <inheritdoc cref="ShutdownAsync" />
         /// <param name="reuseSocket">sets the resuse on disconnect parameter</param>
         void ShutdownAsync(bool reuseSocket);
 
@@ -185,10 +154,65 @@ namespace ph4n.Net
         #endregion write operations
     }
 
-    internal sealed class AsyncTcpSocketOperations35 : IAsyncTcpOperations
+    internal static class IAsyncTcpOperationsEx
     {
         private const int DefaultBacklog = 20;
 
+        /// <inheritdoc cref="IAsyncTcpOperations.Listen(IPEndPoint, int)" />
+        /// <param name="bindTo">The local endpoint.</param>
+        public static void ListenAsync(this IAsyncTcpOperations socketOp, IPEndPoint bindTo)
+        {
+            socketOp.ListenAsync(bindTo, DefaultBacklog);
+        }
+
+        /// <inheritdoc cref="IAsyncTcpOperations.Listen(IPEndPoint, int)" />
+        /// <param name="address">The address of the local endpoint.</param>
+        /// <param name="port">The port of the local endpoint.</param>
+        public static void ListenAsync(this IAsyncTcpOperations socketOp, IPAddress address, int port)
+        {
+            socketOp.ListenAsync(new IPEndPoint(address, port), DefaultBacklog);
+        }
+
+        /// <inheritdoc cref="IAsyncTcpOperations.Listen(IPEndPoint, int)" />
+        /// <param name="port">The port of the local endpoint.</param>
+        /// <param name="backlog">The number of backlog connections for listening.</param>
+        public static void ListenAsync(this IAsyncTcpOperations socketOp, int port, int backlog)
+        {
+            socketOp.ListenAsync(new IPEndPoint(IPAddress.Any, port), backlog);
+        }
+
+        /// <inheritdoc cref="IAsyncTcpOperations.Listen(IPEndPoint, int)" />
+        /// <param name="port">The port of the local endpoint.</param>
+        public static void ListenAsync(this IAsyncTcpOperations socketOp, int port)
+        {
+            socketOp.ListenAsync(new IPEndPoint(IPAddress.Any, port), DefaultBacklog);
+        }
+
+        /// <inheritdoc cref="IAsyncTcpOperations.Listen(IPEndPoint, int)" />
+        /// <param name="address">The address of the local endpoint.</param>
+        /// <param name="port">The port of the local endpoint.</param>
+        /// <param name="backlog">The number of backlog connections for listening.</param>
+        public static void ListenAsync(this IAsyncTcpOperations socketOp, IPAddress address, int port, int backlog)
+        {
+            socketOp.ListenAsync(new IPEndPoint(address, port), backlog);
+        }
+
+        /// <inheritdoc cref="IAsyncTcpOperations.ConnectAsync(IPEndPoint)" />
+        /// <param name="address">The address of the server to connect to.</param>
+        /// <param name="port">The port of the server to connect to.</param>
+        public static void ConnectAsync(this IAsyncTcpOperations socketOp, IPAddress address, int port)
+        {
+            socketOp.ConnectAsync(new IPEndPoint(address, port));
+        }
+
+        public static void ShutdownAsync(this IAsyncTcpOperations socketOp)
+        {
+            socketOp.ShutdownAsync(false);
+        }
+    }
+
+    internal sealed class AsyncTcpSocketOperations35Saea : IAsyncTcpOperations
+    {
         public Socket Socket { get; private set; }
 
         private SocketAsyncEventArgs _writeArgs;
@@ -198,7 +222,7 @@ namespace ph4n.Net
         private SocketAsyncEventArgs _acceptArgs;
         private SocketAsyncEventArgs _shutdownArgs;
 
-        internal AsyncTcpSocketOperations35([NotNull] Socket socket)
+        internal AsyncTcpSocketOperations35Saea([NotNull] Socket socket)
         {
             Validate.ArgumentNotNull(socket, "socket");
 
@@ -225,7 +249,7 @@ namespace ph4n.Net
             var err = args.SocketError;
             AcceptAsync();
             if (err == SocketError.Success)
-                AcceptCompleted.Raise(Socket, new AsyncResultEventArgs<IAsyncTcpOperations>(new AsyncTcpSocketOperations35(args.AcceptSocket)));
+                AcceptCompleted.Raise(Socket, new AsyncResultEventArgs<IAsyncTcpOperations>(new AsyncTcpSocketOperations35Saea(args.AcceptSocket)));
             else
                 AcceptCompleted.Raise(Socket, new AsyncResultEventArgs<IAsyncTcpOperations>(new SocketException()));
         }
@@ -288,31 +312,6 @@ namespace ph4n.Net
             AcceptAsync();
         }
 
-        public void ListenAsync(IPAddress address, int port, int backlog)
-        {
-            ListenAsync(new IPEndPoint(address, port), backlog);
-        }
-
-        public void ListenAsync(IPEndPoint bindTo)
-        {
-            ListenAsync(bindTo, DefaultBacklog);
-        }
-
-        public void ListenAsync(IPAddress address, int port)
-        {
-            ListenAsync(new IPEndPoint(address, port), DefaultBacklog);
-        }
-
-        public void ListenAsync(int port, int backlog)
-        {
-            ListenAsync(new IPEndPoint(IPAddress.Any, port), backlog);
-        }
-
-        public void ListenAsync(int port)
-        {
-            ListenAsync(new IPEndPoint(IPAddress.Any, port), DefaultBacklog);
-        }
-
         public EventHandler<AsyncResultEventArgs<IAsyncTcpOperations>> AcceptCompleted { get; set; }
         public void ConnectAsync(IPEndPoint server)
         {
@@ -320,17 +319,7 @@ namespace ph4n.Net
             Socket.ConnectAsync(_connectArgs);
         }
 
-        public void ConnectAsync(IPAddress address, int port)
-        {
-            ConnectAsync(new IPEndPoint(address, port));
-        }
-
         public event EventHandler<AsyncCompletedEventArgs> ConnectCompleted;
-
-        public void ShutdownAsync()
-        {
-            ShutdownAsync(false);
-        }
 
         public void ShutdownAsync(bool resuseSocket)
         {
