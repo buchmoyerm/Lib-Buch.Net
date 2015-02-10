@@ -143,7 +143,7 @@ namespace ph4n.Test.Common
         }
 
         [TestMethod]
-        [ExpectedException(typeof (ArgumentException))]
+        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void ArgumementGreaterThan_int_is_equal()
         {
             int invalid_input = 0;
@@ -151,7 +151,7 @@ namespace ph4n.Test.Common
         }
 
         [TestMethod]
-        [ExpectedException(typeof (ArgumentException))]
+        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void ArgumentGreaterThan_int_is_less()
         {
             int invalid_input = -1;
@@ -165,7 +165,7 @@ namespace ph4n.Test.Common
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ArgumementGreaterThan_float_is_equal()
         {
             float invalid_input = (float)0.0;
@@ -173,7 +173,7 @@ namespace ph4n.Test.Common
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ArgumentGreaterThan_float_is_less()
         {
             float invalid_input = (float)-0.01;
