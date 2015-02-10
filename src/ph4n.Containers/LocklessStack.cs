@@ -23,37 +23,31 @@ namespace ph4n.Containers
             _array = new T[_capacity];
         }
 
-        public bool Push([NotNull] T item)
+        public bool TryPush([NotNull] T item)
         {
             Validate.ArgumentNotNull(item,"item");
 
-            var pushLocation = Interlocked.Increment(ref _top);
-
-            //valid location
-            if (pushLocation < _capacity)
+            //increment when not at the top
+            var pushLocation = Interlocked.CompareExchange(ref _top, _top + 1, _capacity);
+            if ( pushLocation >= 0 && pushLocation < _capacity)
             {
                 _array[pushLocation] = item;
                 return true;
             }
 
-            //invalid location
-            Interlocked.Decrement(ref _top);
             return false;
         }
 
         [CanBeNull]
-        public T Pop()
+        public T TryPop()
         {
-            var popLocation = Interlocked.Decrement(ref _top) + 1;
-
-            //valid location
-            if (popLocation >= 0)
+            //decrement when not at the bottom
+            var popLocation = Interlocked.CompareExchange(ref _top, _top - 1, -1);
+            if (popLocation < _capacity && popLocation > -1)
             {
                 return _array[popLocation];
             }
 
-            //invalid location
-            Interlocked.Increment(ref _top);
             return default(T);
         }
     }
