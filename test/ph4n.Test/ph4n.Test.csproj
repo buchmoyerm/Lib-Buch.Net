@@ -57,7 +57,7 @@
     <Compile Include="Common\CharExTests.cs" />
     <Compile Include="Common\ValidateTests.cs" />
     <Compile Include="Common\UpdateValTests.cs" />
-    <Compile Include="Containers\LocklessStackTest.cs" />
+    <Compile Include="Containers\LocklessFixedSizeStackTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Threading\CreateTimerTests.cs" />
   </ItemGroup>

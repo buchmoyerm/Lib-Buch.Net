@@ -5,7 +5,7 @@ using ph4n.Containers;
 namespace ph4n.Test.Containers
 {
     [TestClass]
-    public class LocklessStackTest
+    public class LocklessFixedSizeStackTest
     {
         class Foo
         {
@@ -16,27 +16,27 @@ namespace ph4n.Test.Containers
         [TestMethod]
         public void valid_ctor_test()
         {
-            var stack = new LocklessStack<Foo>(10);
+            var stack = new LocklessFixedSizeStack<Foo>(10);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void invalid_ctor_test()
         {
-            var stack = new LocklessStack<Foo>(0);
+            var stack = new LocklessFixedSizeStack<Foo>(0);
         }
 
         [TestMethod]
         public void TryPush_onto_empty_stack()
         {
-            var stack = new LocklessStack<Foo>(2);
+            var stack = new LocklessFixedSizeStack<Foo>(2);
             Assert.IsTrue(stack.TryPush(new Foo()), "Indicates could not push");
         }
 
         [TestMethod]
         public void TryPush_onto_full_stack()
         {
-            var stack = new LocklessStack<Foo>(1);
+            var stack = new LocklessFixedSizeStack<Foo>(1);
             Assert.IsTrue(stack.TryPush(new Foo()), "Could not push first item");
             Assert.IsFalse(stack.TryPush(new Foo()), "Should not be able to push past capacity");
         }
@@ -44,7 +44,7 @@ namespace ph4n.Test.Containers
         [TestMethod]
         public void TryPop_from_empty_stack()
         {
-            var stack = new LocklessStack<Foo>(2);
+            var stack = new LocklessFixedSizeStack<Foo>(2);
             Assert.IsNull(stack.TryPop(), "Did not pop null");
         }
 
@@ -52,7 +52,7 @@ namespace ph4n.Test.Containers
         public void TryPop_first_item()
         {
             var f = new Foo() {TestStr = "test"};
-            var stack = new LocklessStack<Foo>(2);
+            var stack = new LocklessFixedSizeStack<Foo>(2);
             stack.TryPush(f);
             Assert.AreEqual(f, stack.TryPop(), "Popped item is not the same as pushed");
         }
@@ -62,7 +62,7 @@ namespace ph4n.Test.Containers
         {
             var first = new Foo() {TestStr = "first"};
             var second = new Foo() {TestStr = "second"};
-            var stack = new LocklessStack<Foo>(2);
+            var stack = new LocklessFixedSizeStack<Foo>(2);
 
             stack.TryPush(first);
             stack.TryPop();
