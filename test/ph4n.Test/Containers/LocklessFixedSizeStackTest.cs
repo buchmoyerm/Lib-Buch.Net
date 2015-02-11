@@ -7,7 +7,7 @@ namespace ph4n.Test.Containers
     [TestClass]
     public class LocklessFixedSizeStackTest
     {
-        class Foo
+        private class Foo
         {
             public string TestStr { get; set; }
             public int TestInt { get; set; }

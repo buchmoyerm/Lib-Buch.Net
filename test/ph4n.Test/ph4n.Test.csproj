@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Containers\BlockingQueueTests.cs" />
     <Compile Include="Common\SwapTests.cs" />
     <Compile Include="Common\ConvertToTests.cs" />
     <Compile Include="Common\DateTests.cs" />
