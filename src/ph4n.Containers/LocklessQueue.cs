@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using JetBrains.Annotations;
 
 namespace ph4n.Containers
@@ -6,48 +7,88 @@ namespace ph4n.Containers
     public class LocklessQueue<T>
     {
         private LlNode<T> _enqueueNode;
-        private LlNode<T> _dequeNode;
+        private LlNode<T> _dequeueNode;
         private int _nodeCount;
 
         public LocklessQueue()
         {
             _nodeCount = 0;
-            _enqueueNode = null;
-            _dequeNode = null;
+            _enqueueNode = _dequeueNode = new LlNode<T>(default(T));
         }
 
         public int Count { get { return _nodeCount; } }
 
         public void Enqueue(T value)
         {
-            var newNode = new LlNode<T>(value);
+            LlNode<T> oldEnqueNode = null;
+            LlNode<T> oldEqueueNext = null;
 
-            //create new enqueue location
-            var originalInsertLocation = Interlocked.Exchange(ref _enqueueNode, newNode);
-            var origCount = Interlocked.Increment(ref _nodeCount);
+            var node = new LlNode<T>(value);
+            bool updatedLink = false;
+            while (!updatedLink)
+            {
+                //get local copies
+                oldEnqueNode = _enqueueNode;
+                oldEqueueNext = oldEnqueNode.Next; //get from local copy in case another thread changed _enqueueNode
 
-            if (origCount == 0 || originalInsertLocation == null)//first item added to empty queue
-            {
-                Interlocked.CompareExchange(ref _dequeNode, _enqueueNode, null); //prepare dequeue if dequeue is null
+                //has _enqueueNode changed?
+                if (_enqueueNode == oldEnqueNode)
+                {
+                    if (oldEqueueNext == null)
+                    {
+                        updatedLink = SyncMethods.CAS(ref _enqueueNode.Next, null, node);
+                    }
+                    else
+                    {
+                        //another thread is updating so try to advance
+                        SyncMethods.CAS(ref _enqueueNode, oldEnqueNode, oldEqueueNext);
+                    }
+                }
             }
-            else
-            {
-                //create link
-                originalInsertLocation.Next = newNode;
-            }
+
+            Interlocked.Increment(ref _nodeCount);
+
+            //try updating the enqueue field to point to the node being added
+            //if we can't update thats because another thread is also enqueue at will succeed
+            SyncMethods.CAS(ref _enqueueNode, oldEnqueNode, node);
         }
 
         public T Dequeue()
         {
-            var retNode = Interlocked.Exchange(ref _dequeNode, GetNext(_dequeNode));
-            if (retNode != null)
+            T result = default(T);
+
+            bool haveAdvancedDequeue = false;
+            while (!haveAdvancedDequeue)
             {
-                Interlocked.Decrement(ref _nodeCount);
-                //if returning the the only node set the deque node to null
-                Interlocked.CompareExchange(ref _enqueueNode, null, retNode);
-                return retNode.Value;
+                //make local copies of Enqueue, Dequeue, and Dequeue next
+                var oldDequeue = _dequeueNode;
+                var oldEnqueue = _enqueueNode;
+                var oldDequeueNext = oldDequeue.Next; //get from local copy in case _dequeueNode changed
+
+                //has the field changed
+                if (oldDequeue == _dequeueNode)
+                {
+                    if (oldDequeue == oldEnqueue)
+                    {
+                        if (oldDequeueNext == null)
+                        {
+                            return default(T);
+                        }
+
+                        //if dequeue's next field is non-null and head and dequeue == enqueue
+                        //then we have a lagging tail: try to update it
+                        SyncMethods.CAS(ref _enqueueNode, oldEnqueue, oldDequeueNext);
+                    }
+                    else
+                    {
+                        //grab item to dequeue and try to advance dequeue
+                        result = oldDequeueNext.Value;
+                        haveAdvancedDequeue = SyncMethods.CAS(ref _dequeueNode, oldDequeue, oldDequeueNext);
+                    }
+                }
             }
-            return default(T);
+            Interlocked.Decrement(ref _nodeCount);
+            return result;
         }
 
         [CanBeNull]
@@ -58,6 +99,17 @@ namespace ph4n.Containers
                 return node.Next;
             }
             return null;
+        }
+
+        public static class SyncMethods
+        {
+            //Compare and swap
+            public static bool CAS<T>(ref T location, T comparand, T newValue) where T : class
+            {
+                return
+                    (object)comparand ==
+                    (object)Interlocked.CompareExchange<T>(ref location, newValue, comparand);
+            }
         }
     }
 }
