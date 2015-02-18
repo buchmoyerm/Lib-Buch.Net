@@ -34,5 +34,5 @@ ph4n can be used for easy type conversions. Especially in instances where `Conve
 
     string myStr = "small string";
     myStr.SafeSubstring(0,200); //returns "small string"
-    myStr.SafeSubstring(6,100); //returns "strings"
+    myStr.SafeSubstring(6,100); //returns "string"
     myStr.SafeSubstring(100,200); returns string.empty
