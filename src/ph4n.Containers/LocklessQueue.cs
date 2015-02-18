@@ -18,6 +18,25 @@ namespace ph4n.Containers
 
         public int Count { get { return _nodeCount; } }
 
+        // LocklessQueue is a linked list where items are Enqued at the tail and dequeued at the head
+        //
+        //    -------------              -------------              -------------
+        //   |             |            |             |            |             |
+        //   |             |   link     |             |   link     |             |   link
+        //   |   dequeue   | -------->  |   item2     | -------->  |   enqueue   | -------> null
+        //   |             |            |             |            |             |
+        //   |             |            |             |            |             |
+        //    -------------              -------------              -------------
+        // The dequeued (head) node has 
+        // already been removed from the queue
+        // A call to Dequeue() will return item2.value
+        // and advance the dequeue node to point to item2 node
+        // when dequeue and enqueue are pointing to the
+        // same node then we know that it has already been
+        // dequeued and the queue is empty
+        // Enqueue(T value) will then advance enqueue so that
+        // Dequeue() has a new value to return
+
         public void Enqueue(T value)
         {
             LlNode<T> oldEnqueNode = null;
