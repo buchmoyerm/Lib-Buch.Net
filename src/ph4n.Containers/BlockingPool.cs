@@ -10,7 +10,20 @@ namespace ph4n.Containers
 
     public enum AccessMode { FIFO, LIFO, Circular };
 
-
+    /// <summary>
+    /// Holds a pool of objects. The pool has a fixed capacity.
+    /// This pool is useful for when you are managing a fixed number
+    /// of resources but want to access those resources from multiple locations
+    /// for example you could have a fixed number of connection objects that
+    /// can be used by Acquiring and disposing
+    /// </summary>
+    /// <typeparam name="T">The type of object in the pool</typeparam>
+    /// <code>
+    /// using (var connection = connectionPool.Acquire())
+    /// {
+    ///     /*statments using connection*/
+    /// } //on dispose the connection will be returned the pool for re-use
+    /// </code>
     public class BlockingPool<T> : IPool<T>, IDisposable
     {
         private bool isDisposed;
@@ -27,11 +40,13 @@ namespace ph4n.Containers
 
         private Semaphore sync;
 
-        public BlockingPool(int size, Func<T> factory)
-            : this(size, factory, LoadingMode.Lazy, AccessMode.FIFO)
-        {
-        }
-
+        /// <summary>
+        /// Constructs a new pool of objects
+        /// </summary>
+        /// <param name="size">size of the pool</param>
+        /// <param name="factory">delegate for creating objects to fill the pool</param>
+        /// <param name="loadingMode">loading mode indicates when the pool gets filled</param>
+        /// <param name="accessMode">access mode indicates order that items in the pool get aquired</param>
         public BlockingPool(int size, Func<T> factory,
             LoadingMode loadingMode, AccessMode accessMode)
         {
@@ -49,6 +64,24 @@ namespace ph4n.Containers
             }
         }
 
+        /// <inheritdoc cref="BlockingPool(int, Func<T>, LoadingMode, AccessMode)"/>
+        /// <summary>
+        /// default Loading Mode is Lazy
+        /// default Access Mode is FIFO
+        /// </summary>
+        /// <param name="size">size of the pool</param>
+        /// <param name="factory">delegate for creating objects to fill the pool</param>
+        public BlockingPool(int size, Func<T> factory)
+            : this(size, factory, LoadingMode.Lazy, AccessMode.FIFO)
+        {
+        }
+
+        /// <summary>
+        /// Acquires the next available item in the pool
+        /// Function will block if there are no available items
+        /// and pool has reach capacity
+        /// </summary>
+        /// <returns>IPooledItem<T> containing the next item</returns>
         public IPooledItem<T> Acquire()
         {
             sync.WaitOne();
@@ -65,6 +98,11 @@ namespace ph4n.Containers
             }
         }
 
+        /// <summary>
+        /// Releases an IPooledItem back to the pool
+        /// Will unblock a call to Acquire since an item is now avaible
+        /// </summary>
+        /// <param name="item">item to be returned</param>
         public void Release(IPooledItem<T> item)
         {
             lock (itemStore)
@@ -179,12 +217,17 @@ namespace ph4n.Containers
             get { return isDisposed; }
         }
 
+        /// <summary>
+        /// Wrapper for items being pooled
+        /// The wrapper is IDisposable and Dispose will return item to pool
+        /// This allows for convenient using usage pattern
+        /// </summary>
         public class PooledItem : IPooledItem<T>
         {
             private T _internalItem;
             private IPool<T> _pool;
 
-            public PooledItem(IPool<T> pool, T item)
+            internal PooledItem(IPool<T> pool, T item)
             {
                 Validate.ArgumentNotNull(pool, "pool");
                 Validate.ArgumentNotNull(item, "item");
