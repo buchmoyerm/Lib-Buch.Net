@@ -101,9 +101,10 @@ namespace ph4n.Common
         /// <param name="greaterThan">value argument must be greater than</param>
         /// <param name="parameterName">name of the argument</param>
         /// <remarks>throws ArgumentOutOfRangeException, ArgumentNullException</remarks>
-        public static void ArgumementGreaterThan(IComparable argument, IComparable greaterThan, [NotNull, InvokerParameterName] string parameterName)
+        public static void ArgumementGreaterThan([NotNull] IComparable argument, IComparable greaterThan, [NotNull, InvokerParameterName] string parameterName)
         {
             Validate.ArgumentNotNullOrEmpty(parameterName, "parameterName");
+            Validate.ArgumentNotNull(argument, parameterName);
 
             if (argument.CompareTo(greaterThan) <= 0 )
             {
