@@ -32,7 +32,7 @@ namespace ph4n.Test.Containers
         }
 
         [TestMethod()]
-        public void Dequeue_empty_test()
+        public void Dequeue_empty_should_block_test()
         {
             var queue = new BlockingQueue<Foo>();
             Foo dequeuedValue = null;
