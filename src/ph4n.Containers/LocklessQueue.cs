@@ -13,6 +13,8 @@ namespace ph4n.Containers
         public LocklessQueue()
         {
             _nodeCount = 0;
+            //initialize with an empty node
+            //when enqueue and dequeue are pointing to the same node the list is empty
             _enqueueNode = _dequeueNode = new LlNode<T>(default(T));
         }
 
