@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/42ywstwoahcfr6o9?svg=true)](https://ci.appveyor.com/project/buchmoyerm/lib-ph4n)
+
 ph4n
 ===============
 
