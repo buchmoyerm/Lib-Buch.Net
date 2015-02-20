@@ -30,7 +30,7 @@ namespace ph4n.Test.Threading
         public void For_Action_TimeSpan()
         {
             var timer = CreateTimer.For(SetAction, TimeSpan.FromMilliseconds(30));
-            Assert.IsTrue(_timeElapsed.WaitOne(TimeSpan.FromMilliseconds(50)), "Timer did not fire");
+            Assert.IsTrue(_timeElapsed.WaitOne(TimeSpan.FromMilliseconds(60)), "Timer did not fire");
         }
 
         [TestMethod]

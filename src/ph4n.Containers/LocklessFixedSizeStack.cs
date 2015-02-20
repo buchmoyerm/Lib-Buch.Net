@@ -19,6 +19,9 @@ namespace ph4n.Containers
             _array = new T[_capacity];
         }
 
+        //popFrom would be the count (which is the number that can be popped from the stack)
+        public int Count { get {return _popFrom;} }
+
         public bool TryPush([NotNull] T item)
         {
             Validate.ArgumentNotNull(item,"item");

@@ -22,7 +22,7 @@ namespace ph4n.Test.Containers
         }
 
         [TestMethod]
-        public void Aquire_eager_fifo_test()
+        public void Acquire_eager_fifo_test()
         {
             //will fill all 10 values right away
             IPool<int> pool = new BlockingPool<int>(10, IntFactory, LoadingMode.Eager, AccessMode.FIFO);
@@ -37,7 +37,7 @@ namespace ph4n.Test.Containers
         }
 
         [TestMethod]
-        public void Aquire_lazy_fifo_test()
+        public void Acquire_lazy_fifo_test()
         {
             //does not fill any values initially
             IPool<int> pool = new BlockingPool<int>(10, IntFactory, LoadingMode.Lazy, AccessMode.FIFO);
@@ -54,7 +54,7 @@ namespace ph4n.Test.Containers
         }
 
         [TestMethod]
-        public void Aquire_lazyexpanding_fifo_test()
+        public void Acquire_lazyexpanding_fifo_test()
         {
             //does not fill any values initially
             IPool<int> pool = new BlockingPool<int>(10, IntFactory, LoadingMode.LazyExpanding, AccessMode.FIFO);
@@ -70,7 +70,7 @@ namespace ph4n.Test.Containers
         }
 
         [TestMethod]
-        public void Aquire_eager_lifo_test()
+        public void Acquire_eager_lifo_test()
         {
             //will fill all 10 values right away
             IPool<int> pool = new BlockingPool<int>(10, IntFactory, LoadingMode.Eager, AccessMode.LIFO);
@@ -86,7 +86,7 @@ namespace ph4n.Test.Containers
         }
 
         [TestMethod]
-        public void Aquire_lazy_lifo_test()
+        public void Acquire_lazy_lifo_test()
         {
             //does not fill any values initially
             IPool<int> pool = new BlockingPool<int>(10, IntFactory, LoadingMode.Lazy, AccessMode.LIFO);
@@ -102,7 +102,7 @@ namespace ph4n.Test.Containers
         }
 
         [TestMethod]
-        public void Aquire_lazyexpanding_lifo_test()
+        public void Acquire_lazyexpanding_lifo_test()
         {
             //does not fill any values initially
             IPool<int> pool = new BlockingPool<int>(10, IntFactory, LoadingMode.LazyExpanding, AccessMode.LIFO);
@@ -118,7 +118,7 @@ namespace ph4n.Test.Containers
         }
 
         [TestMethod]
-        public void Aquire_full_blocks_test()
+        public void Acquire_full_blocks_test()
         {
             IPool<int> pool = new BlockingPool<int>(1, IntFactory);
 
@@ -136,7 +136,7 @@ namespace ph4n.Test.Containers
         }
 
         [TestMethod]
-        public void Aquire_unblocks_test()
+        public void Acquire_unblocks_test()
         {
             IPool<int> pool = new BlockingPool<int>(1, IntFactory);
 

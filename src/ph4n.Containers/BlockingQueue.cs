@@ -4,7 +4,7 @@ using System.Threading;
 namespace ph4n.Containers
 {
     /// <summary>
-    /// Queue for a efficient enqueueing and dequeueing between different threads
+    /// Queue for an efficient enqueueing and dequeueing between different threads
     /// </summary>
     /// <typeparam name="T">type of ojbect in queue</typeparam>
     public class BlockingQueue<T>

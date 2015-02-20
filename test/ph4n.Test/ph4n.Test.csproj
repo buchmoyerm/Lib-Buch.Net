@@ -61,6 +61,7 @@
     <Compile Include="Containers\LocklessFixedSizeStackTest.cs" />
     <Compile Include="Containers\LocklessQueueTests.cs" />
     <Compile Include="Containers\BlockingPoolTest.cs" />
+    <Compile Include="Containers\LocklessPoolTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Threading\CreateTimerTests.cs" />
   </ItemGroup>

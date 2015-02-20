@@ -49,6 +49,7 @@
     <Compile Include="IPool.cs" />
     <Compile Include="LlNode.cs" />
     <Compile Include="LocklessFixedSizeStack.cs" />
+    <Compile Include="LocklessPool.cs" />
     <Compile Include="LocklessQueue.cs" />
     <Compile Include="BlockingPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
