@@ -59,6 +59,10 @@
       <Project>{b5df2282-b875-4022-b2a2-b834a6d9a618}</Project>
       <Name>ph4n.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ph4n.Containers\ph4n.Containers.csproj">
+      <Project>{4a66c955-457f-49ee-9fc8-f33dde8d2233}</Project>
+      <Name>ph4n.Containers</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="ph4n_key.snk" />

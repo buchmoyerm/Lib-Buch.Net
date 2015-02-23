@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using ph4n.Common;
+using ph4n.Containers;
 
 //
 // See this http://stackoverflow.com/a/17094024/351028
@@ -211,6 +212,21 @@ namespace ph4n.Net
         }
     }
 
+    internal sealed class SaeaPool
+    {
+        private LocklessPool<SocketAsyncEventArgs> _pool;
+
+        public SaeaPool(Func<SocketAsyncEventArgs> factory)
+        {
+            _pool = new LocklessPool<SocketAsyncEventArgs>(3, factory, AccessMode.FIFO);
+        }
+
+        IPooledItem<SocketAsyncEventArgs> GetArgs()
+        {
+            return _pool.Acquire();
+        }
+    }
+
     internal sealed class AsyncTcpSocketOperations35Saea : IAsyncTcpOperations
     {
         public Socket Socket { get; private set; }
@@ -221,6 +237,48 @@ namespace ph4n.Net
         private SocketAsyncEventArgs _connectArgs;
         private SocketAsyncEventArgs _acceptArgs;
         private SocketAsyncEventArgs _shutdownArgs;
+
+        private SaeaPool _writePool;
+        private SaeaPool _writeCallbackOnErrorOnlyPool;
+        private SaeaPool _readPool;
+        private SaeaPool _acceptPool;
+
+        private SaeaPool WritePool
+        {
+            get
+            {
+                return _writePool ?? (_writePool = new SaeaPool(() => SaeaFactory.CreateSaea(SocketWriteComplete)));
+            }
+        }
+
+        private SaeaPool WriteCallBackOnErrorOnlyPool
+        {
+            get
+            {
+                return _writeCallbackOnErrorOnlyPool ?? (_writeCallbackOnErrorOnlyPool = new SaeaPool(() =>
+                {
+                    var args = SaeaFactory.CreateSaea(SocketWriteComplete);
+                    args.UserToken = new CallbackOnErrorsOnly();
+                    return args;
+                }));
+            }
+        }
+
+        private SaeaPool ReadPool
+        {
+            get
+            {
+                return _readPool ?? (_readPool = new SaeaPool(() => SaeaFactory.CreateSaea(SocketReadComplete)));
+            }
+        }
+
+        private SaeaPool AcceptPool
+        {
+            get
+            {
+                return _acceptPool ?? (_acceptPool = new SaeaPool(() => SaeaFactory.CreateSaea(SocketAcceptComplete)));
+            }
+        }
 
         internal AsyncTcpSocketOperations35Saea([NotNull] Socket socket)
         {
