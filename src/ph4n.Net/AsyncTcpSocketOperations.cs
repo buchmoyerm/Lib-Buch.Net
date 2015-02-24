@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using ph4n.Common;
 using ph4n.Containers;
@@ -13,6 +9,31 @@ using ph4n.Containers;
 //
 // See this http://stackoverflow.com/a/17094024/351028
 // 
+
+
+
+//
+// I really like how well IAsyncTcpOperations and IAsyncTcpOperationsEx compliment each other
+// The idea here is that I can create classes that implement IAsyncTcpOperations using different async
+// techniques (i.e. Begin/End methods, Async methods, and Awaitable tasks) in the smallest
+// way possible. This interface can then be wrapped into a very basic socket class that 
+// will expose only the necessary components publicly. The basic socket class can also take
+// a protocol class that will could handle continuously reading from the socket and framing
+// the messages.
+//
+// I also like the idea of the IAsyncTcpOperations being the most basic of operations and OnComplete
+// EventHandlers. This is allows for a more intelligent socket to wrap up multiple types of async
+// types. For instance a class BasicSocket could handle the async read call back by automatically
+// invoking ReadAsync() on the async operations.
+//
+// What I don't like is how ugly the pooling ended up being. I had to use the SocketAsyncEventArgs' UserToken
+// store a reference to the pooled object wrapper so that the EventArg could be recycled for use later.
+// I'm also not sure that they pooled technique is needed for more than just the write args.
+// Writing is the only one that could be happening from multiple threads at once and is the only one where
+// multiple args would be needed. The other args could just have boolean flags indicating that the
+// socket is already doing the async operation. (Reading from multiple threads would also destroy the order
+// of the bytes received).
+//
 
 namespace ph4n.Net
 {
@@ -22,12 +43,47 @@ namespace ph4n.Net
         public static SocketAsyncEventArgs CreateSaea([NotNull] EventHandler<SocketAsyncEventArgs> complete)
         {
             Validate.ArgumentNotNull(complete, "complete");
-            var args = new SocketAsyncEventArgs();
+            var args = new CustomSocketAsyncEventArgs();
             args.Completed += complete;
+            return args;
+        }
+
+        [NotNull]
+        public static SocketAsyncEventArgs CreateCallbackOnErrorOnlySaea(
+            [NotNull] EventHandler<SocketAsyncEventArgs> complete)
+        {
+            var args = (CustomSocketAsyncEventArgs) CreateSaea(complete);
+            args.CallbackOnErrorOnly = true;
             return args;
         }
     }
 
+    internal class CustomSocketAsyncEventArgs : SocketAsyncEventArgs
+    {
+        public CustomSocketAsyncEventArgs()
+        {
+            CallbackOnErrorOnly = false;
+        }
+
+        public bool CallbackOnErrorOnly { get; set; }
+
+        public void DisposeToken()
+        {
+            var d = this.UserToken as IDisposable;
+            UserToken = null;
+            if (d != null)
+            {
+                d.Dispose();
+            }
+        }
+    }
+
+    /// <summary>
+    /// basic Async socket operations and callbacks
+    /// Any implementation of this should do no more than
+    /// perform the operation invoke the complete event when
+    /// it has completed
+    /// </summary>
     internal interface IAsyncTcpOperations
     {
         Socket Socket { get; }
@@ -113,7 +169,7 @@ namespace ph4n.Net
         /// </summary>
         event EventHandler<AsyncResultEventArgs<byte[]>> ReadCompleted;
 
-        void ContinueReadingAsync();
+        void ReadAsync();
         #endregion
 
         #region write operations
@@ -221,7 +277,7 @@ namespace ph4n.Net
             _pool = new LocklessPool<SocketAsyncEventArgs>(3, factory, AccessMode.FIFO);
         }
 
-        IPooledItem<SocketAsyncEventArgs> GetArgs()
+        public IPooledItem<SocketAsyncEventArgs> GetArgs()
         {
             return _pool.Acquire();
         }
@@ -231,11 +287,7 @@ namespace ph4n.Net
     {
         public Socket Socket { get; private set; }
 
-        private SocketAsyncEventArgs _writeArgs;
-        private SocketAsyncEventArgs _writeCallbackOnErrorOnlyArgs;
-        private SocketAsyncEventArgs _readArgs;
         private SocketAsyncEventArgs _connectArgs;
-        private SocketAsyncEventArgs _acceptArgs;
         private SocketAsyncEventArgs _shutdownArgs;
 
         private SaeaPool _writePool;
@@ -255,12 +307,7 @@ namespace ph4n.Net
         {
             get
             {
-                return _writeCallbackOnErrorOnlyPool ?? (_writeCallbackOnErrorOnlyPool = new SaeaPool(() =>
-                {
-                    var args = SaeaFactory.CreateSaea(SocketWriteComplete);
-                    args.UserToken = new CallbackOnErrorsOnly();
-                    return args;
-                }));
+                return _writeCallbackOnErrorOnlyPool ?? (_writeCallbackOnErrorOnlyPool = new SaeaPool(() => SaeaFactory.CreateCallbackOnErrorOnlySaea(SocketWriteComplete)));
             }
         }
 
@@ -291,32 +338,30 @@ namespace ph4n.Net
 
         private void InitAsyncArgs()
         {
-            _writeArgs = SaeaFactory.CreateSaea(SocketWriteComplete);
-            _readArgs = SaeaFactory.CreateSaea(SocketReadComplete);
             _connectArgs = SaeaFactory.CreateSaea(SocketConnectComplete);
-            _acceptArgs = SaeaFactory.CreateSaea(SocketAcceptComplete);
             _shutdownArgs = SaeaFactory.CreateSaea(SocketShutdownComplete);
-            _writeCallbackOnErrorOnlyArgs = SaeaFactory.CreateSaea(SocketWriteComplete);
-            _writeCallbackOnErrorOnlyArgs.UserToken = new CallbackOnErrorsOnly();
         }
 
         #region Async callbacks
 
         private void SocketAcceptComplete(object sender, SocketAsyncEventArgs args)
         {
-            var err = args.SocketError;
-            AcceptAsync();
+            var customArgs = (CustomSocketAsyncEventArgs)args;
+            var err = customArgs.SocketError;
+            var socket = customArgs.AcceptSocket;
+            customArgs.DisposeToken();
             if (err == SocketError.Success)
-                AcceptCompleted.Raise(Socket, new AsyncResultEventArgs<IAsyncTcpOperations>(new AsyncTcpSocketOperations35Saea(args.AcceptSocket)));
+                AcceptCompleted.Raise(Socket, new AsyncResultEventArgs<IAsyncTcpOperations>(new AsyncTcpSocketOperations35Saea(customArgs.AcceptSocket)));
             else
                 AcceptCompleted.Raise(Socket, new AsyncResultEventArgs<IAsyncTcpOperations>(new SocketException()));
         }
 
         private void SocketReadComplete(object sender, SocketAsyncEventArgs args)
         {
-            var buffer = args.Buffer;
-            var err = args.SocketError;
-            ContinueReadingAsync();
+            var customArgs = (CustomSocketAsyncEventArgs) args;
+            var buffer = customArgs.Buffer;
+            var err = customArgs.SocketError;
+            customArgs.DisposeToken();
             if (err == SocketError.Success)
                 ReadCompleted.Raise(Socket, new AsyncResultEventArgs<byte[]>(buffer));
             else
@@ -325,8 +370,11 @@ namespace ph4n.Net
 
         private void SocketWriteComplete(object sender, SocketAsyncEventArgs args)
         {
-            var err = args.SocketError;
-            if (err == SocketError.Success && args.UserToken is CallbackOnErrorsOnly)
+            var customArgs = (CustomSocketAsyncEventArgs) args;
+            var err = customArgs.SocketError;
+            var callbackOnErrorOnly = customArgs.CallbackOnErrorOnly;
+            customArgs.DisposeToken();
+            if (err == SocketError.Success && callbackOnErrorOnly)
                 return;
             if (err == SocketError.Success)
                 WriteCompleted.Raise(Socket, new AsyncCompletedEventArgs(null, false, null));
@@ -355,9 +403,11 @@ namespace ph4n.Net
 
         private void AcceptAsync()
         {
-            if (!Socket.AcceptAsync(_acceptArgs))
+            var args = AcceptPool.GetArgs();
+            args.Target.UserToken = args;
+            if (!Socket.AcceptAsync(args.Target))
             {
-                SocketAcceptComplete(Socket, _acceptArgs);
+                SocketAcceptComplete(Socket, args.Target);
             }
         }
 
@@ -389,27 +439,33 @@ namespace ph4n.Net
 
         public event EventHandler<AsyncResultEventArgs<byte[]>> ReadCompleted;
 
-        public void ContinueReadingAsync()
+        public void ReadAsync()
         {
-            if (!Socket.ReceiveAsync(_readArgs))
+            var args = ReadPool.GetArgs();
+            args.Target.UserToken = args;
+            if (!Socket.ReceiveAsync(args.Target))
             {
-                SocketReadComplete(Socket, _readArgs);
+                SocketReadComplete(Socket, args.Target);
             }
         }
 
         public void WriteAsync(byte[] buffer)
         {
-            if (!Socket.SendAsync(_writeArgs))
+            var args = WritePool.GetArgs();
+            args.Target.UserToken = args;
+            if (!Socket.SendAsync(args.Target))
             {
-                SocketWriteComplete(Socket, _writeArgs);       
+                SocketWriteComplete(Socket, args.Target);       
             }
         }
 
         public void WriteAsyncCallbackOnErrorOnly(byte[] buffer)
         {
-            if (!Socket.SendAsync(_writeCallbackOnErrorOnlyArgs))
+            var args = WriteCallBackOnErrorOnlyPool.GetArgs();
+            args.Target.UserToken = args;
+            if (!Socket.SendAsync(args.Target))
             {
-                SocketWriteComplete(Socket, _writeCallbackOnErrorOnlyArgs);
+                SocketWriteComplete(Socket, args.Target);
             }
         }
 
