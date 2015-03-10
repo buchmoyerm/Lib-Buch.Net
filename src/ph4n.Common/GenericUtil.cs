@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 
 namespace ph4n.Common
 {
@@ -17,6 +18,7 @@ namespace ph4n.Common
         /// <param name="rhs">will become lhs object</param>
         public static void Swap<T>(ref T lhs, ref T rhs)
         {
+            //rhs = Interlocked.Exchange(ref lhs, rhs);
             var temp = lhs;
             lhs = rhs;
             rhs = temp;
